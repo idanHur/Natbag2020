@@ -42,7 +42,6 @@ public class Flight {
 		pw.println(airlineName);
 		pw.println(terminalNum);
 		pw.println(numFlight);
-		
 		String depH = ""+ scheduledDate.getHour();
 		if (scheduledDate.getHour() < 10) 
 			depH = "0"+ scheduledDate.getHour();

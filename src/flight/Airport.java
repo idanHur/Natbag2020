@@ -3,6 +3,7 @@ package flight;
 import java.io.PrintWriter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.Vector;
@@ -21,6 +22,7 @@ public class Airport {
 	}
 	
 	public Airport (Scanner scan) {
+		requestedFlights = new Vector<>();
 		landings = new Vector<Flight>();
 		departures = new Vector<Flight>();
 		airportName = "Natbag";
@@ -123,57 +125,47 @@ public String textFormate(String direction) {
 	return new TextFormate().stringValue(this, direction);
 }
 	
+	public void setFromFile(Scanner scan) {
+		requestedFlights = new Vector<>();
+		landings = new Vector<Flight>();
+		departures = new Vector<Flight>();
+		airportName = "Natbag";
+		int numOfDeparture = scan.nextInt();
+		scan.nextLine();
+		for (int i = 0; i < numOfDeparture; i++) {
+			departures.add(new Flight(scan));
+		}
+		int numOFLandings = scan.nextInt();
+		scan.nextLine();
+		for (int i = 0; i < numOFLandings; i++) {
+			landings.add(new Flight(scan));
+		}
+	}
 	
 	
-	
-/*	public String toStringDeparturesByDepTime(String date) {
+	public String toStringDeparturesByScedualTime(String date) {
 		StringBuffer str = new StringBuffer();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
 		LocalDateTime dateGiven = LocalDateTime.parse(date, formatter);
-		SortByDepTime();
 		for (Flight flight : departures) {
-			if (flight.getDepartureDate().equals(dateGiven)) {
+			if (flight.getScheduledDate().equals(dateGiven)) {
 				str.append(flight.toString()+"\n");
 			}
 		}
 		return str.toString();
 	}
-	public String toStringLandingsByDepTime(String date) {
+	public String toStringLandingsByScedualTime(String date) {
 		StringBuffer str = new StringBuffer();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu"); // add exeption??
 		LocalDateTime dateGiven = LocalDateTime.parse(date, formatter);
-		SortByDepTime();
 		for (Flight flight : landings) {
-			if (flight.getDepartureDate().equals(dateGiven)) {
+			if (flight.getScheduledDate().equals(dateGiven)) {
 				str.append(flight.toString()+"\n");
 			}
 		}
 		return str.toString();
 	}
-	public String toStringDeparturesBylandTime(String date) {
-		StringBuffer str = new StringBuffer();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu"); // add exeption??
-		LocalDateTime dateGiven = LocalDateTime.parse(date, formatter);
-		SortByLandTime();
-		for (Flight flight : departures) {
-			if (flight.getDepartureDate().equals(dateGiven)) {
-				str.append(flight.toString()+"\n");
-			}
-		}
-		return str.toString();
-	}
-	public String toStringLandingsBylandTime(String date) {
-		StringBuffer str = new StringBuffer();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu"); // add exeption??
-		LocalDateTime dateGiven = LocalDateTime.parse(date, formatter);
-		SortByLandTime();
-		for (Flight flight : landings) {
-			if (flight.getDepartureDate().equals(dateGiven)) {
-				str.append(flight.toString()+"\n");
-			}
-		}
-		return str.toString();
-	}
+	
 	public String toStringByAirline(String airline) {
 		StringBuffer str = new StringBuffer();
 		for (Flight flight : departures) {
@@ -189,34 +181,34 @@ public String textFormate(String direction) {
 		return str.toString();
 	}
 
-	public String toStringLandingsByOrgine(String orgine) {
+	public String toStringLandingsByCountry(String country) {
 		StringBuffer str = new StringBuffer();
 		for (Flight flight : landings) {
-			if (flight.getOrgin().equalsIgnoreCase(orgine)) {
+			if (flight.getCountry().equalsIgnoreCase(country)) {
 				str.append(flight.toString()+"\n");
 			}
 		}
 		return str.toString();
 	}
-	public String toStringDeparturesByDest(String destanation) {
+	public String toStringDeparturesByCountry(String country) {
 		StringBuffer str = new StringBuffer();
 		for (Flight flight : departures) {
-			if (flight.getOrgin().equalsIgnoreCase(destanation)) {
+			if (flight.getCountry().equalsIgnoreCase(country)) {
 				str.append(flight.toString()+"\n");
 			}
 		}
 		return str.toString();
 	}
 	
-	public String flightId(int flightNum) {
+	public String flightId(String flightNum) {
 		StringBuffer str = new StringBuffer();
 		for (Flight flight : departures) {
-			if (flight.getNumFlight() == flightNum) {
+			if (flight.getNumFlight().equalsIgnoreCase(flightNum)) {
 				str.append(flight.toString()+"\n");
 			}
 		}
 		for (Flight flight : landings) {
-			if (flight.getNumFlight() == flightNum) {
+			if (flight.getNumFlight().equalsIgnoreCase(flightNum)) {
 				str.append(flight.toString()+"\n");
 			}
 		}
@@ -227,9 +219,9 @@ public String textFormate(String direction) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu"); // add exeption??
 		LocalDateTime dateFrom = LocalDateTime.parse(From, formatter);
 		LocalDateTime dateTo = LocalDateTime.parse(To, formatter);
-		departures.sort(new CompareByLandTime());
+		departures.sort(new CompareByScheduledTime());
 		for (Flight flight : departures) {
-			if (flight.getDepartureDate().isAfter(dateFrom) && flight.getDepartureDate().isBefore(dateTo)) {
+			if (flight.getScheduledDate().isAfter(dateFrom) && flight.getScheduledDate().isBefore(dateTo)) {
 				str.append(flight.toString()+"\n");
 			}
 		}
@@ -240,9 +232,9 @@ public String textFormate(String direction) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu"); // add exeption??
 		LocalDateTime dateFrom = LocalDateTime.parse(From, formatter);
 		LocalDateTime dateTo = LocalDateTime.parse(To, formatter);
-		landings.sort(new CompareByLandTime());
+		landings.sort(new CompareByScheduledTime());
 		for (Flight flight : landings) {
-			if (flight.getDepartureDate().isAfter(dateFrom) && flight.getDepartureDate().isBefore(dateTo)) {
+			if (flight.getScheduledDate().isAfter(dateFrom) && flight.getScheduledDate().isBefore(dateTo)) {
 				str.append(flight.toString()+"\n");
 			}
 		}
@@ -251,9 +243,9 @@ public String textFormate(String direction) {
 	public String toStringInDays(DayOfWeek day1, DayOfWeek day2, DayOfWeek day3, DayOfWeek day4, DayOfWeek day5, DayOfWeek day6, DayOfWeek day7) {
 		StringBuffer str = new StringBuffer();
 		for (Flight flight : departures) {
-			if (flight.getDepartureDate().getDayOfWeek().compareTo(day1) == 0 || flight.getDepartureDate().getDayOfWeek().compareTo(day2) == 0 || flight.getDepartureDate().getDayOfWeek().compareTo(day3) == 0 ||
-					flight.getDepartureDate().getDayOfWeek().compareTo(day4) == 0 || flight.getDepartureDate().getDayOfWeek().compareTo(day5) == 0 ||flight.getDepartureDate().getDayOfWeek().compareTo(day6) == 0 ||
-					flight.getDepartureDate().getDayOfWeek().compareTo(day7) == 0) {
+			if (flight.getScheduledDate().getDayOfWeek().compareTo(day1) == 0 || flight.getScheduledDate().getDayOfWeek().compareTo(day2) == 0 || flight.getScheduledDate().getDayOfWeek().compareTo(day3) == 0 ||
+					flight.getScheduledDate().getDayOfWeek().compareTo(day4) == 0 || flight.getScheduledDate().getDayOfWeek().compareTo(day5) == 0 ||flight.getScheduledDate().getDayOfWeek().compareTo(day6) == 0 ||
+					flight.getScheduledDate().getDayOfWeek().compareTo(day7) == 0) {
 				str.append(flight.toString()+"\n");
 			}
 		}
@@ -263,7 +255,7 @@ public String textFormate(String direction) {
 		StringBuffer str = new StringBuffer();
 		landings.sort(new CompareByDayOfWeek());
 		for (Flight flight : landings) {
-			if (flight.getDepartureDate().getDayOfWeek().compareTo(day) == 0) {
+			if (flight.getScheduledDate().getDayOfWeek().compareTo(day) == 0) {
 				str.append(flight.toString()+"\n");
 			}
 		}
@@ -273,36 +265,13 @@ public String textFormate(String direction) {
 		StringBuffer str = new StringBuffer();
 		departures.sort(new CompareByDayOfWeek());
 		for (Flight flight : departures) {
-			if (flight.getDepartureDate().getDayOfWeek().compareTo(day) == 0) {
+			if (flight.getScheduledDate().getDayOfWeek().compareTo(day) == 0) {
 				str.append(flight.toString()+"\n");
 			}
 		}
 		return str.toString();
 	
 	}
-	public void SortByCompanyName() {
-		landings.sort(new CompareByCompanyName());
-		departures.sort(new CompareByCompanyName());
-	}
-	public void SortByDepTime() {
-		landings.sort(new CompareByDepTime());
-		departures.sort(new CompareByDepTime());
-	}
-	public void SortByLandTime() {
-		landings.sort(new CompareByLandTime());
-		departures.sort(new CompareByLandTime());
-	}
-	public void SortByOrgin() {
-		landings.sort(new CompareByOrgin());
-		departures.sort(new CompareByOrgin());
-	}
-	public void SortByDestanation() {
-		landings.sort(new CompareByDestanation());
-		departures.sort(new CompareByDestanation());
-	}
-	
-	
-	
 	
 	
 	
@@ -320,6 +289,6 @@ public String textFormate(String direction) {
 				str.append(departures.get(i).toString()+"\n");
 			}
 		return str.toString();
-	}*/
+	}
 
 }
