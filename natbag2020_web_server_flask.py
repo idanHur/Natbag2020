@@ -8,7 +8,7 @@ app = Flask("natbag2020_app")
 @app.route("/departures")
 def dep():
     return subprocess.check_output(["java", "-classpath",
-                                    "/home/afeka/Natbag2020/Natbag2020/bin", "flight.main",
+                                    "/home/afeka/Natbag2020/bin", "flight.main",
                                     request.args.get('outformat'), "departures",
                                     request.args.get('airline'), request.args.get('country'),
                                     request.args.get('city'), request.args.get('airport'),
@@ -23,7 +23,7 @@ def dep():
 @app.route("/arrivals")
 def arr():
     return subprocess.check_output(["java", "-classpath",
-                                    "/home/afeka/Natbag2020/Natbag2020/bin", "flight.main",
+                                    "/home/afeka/Natbag2020/bin", "flight.main",
                                     request.args.get('outformat'), "landings",
                                     request.args.get('airline'), request.args.get('country'),
                                     request.args.get('city'), request.args.get('airport'),
