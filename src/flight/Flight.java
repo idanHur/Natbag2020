@@ -79,7 +79,35 @@ public class Flight {
 		this.terminalNum = terminalNum;
 	}
 	public String getScheduledDateInString() {
-		return scheduledDate.getDayOfMonth() +"/"+scheduledDate.getMonthValue()+"/"+scheduledDate.getYear()+" "+scheduledDate.getHour()+":"+scheduledDate.getMinute();
+		StringBuffer str = new StringBuffer();
+	
+		if (scheduledDate.getDayOfMonth() < 10) {
+			str.append("0" +scheduledDate.getDayOfMonth());
+		}else {
+			str.append(""+ scheduledDate.getDayOfMonth());
+		}
+		str.append("/");
+		if (scheduledDate.getMonthValue() < 10 ) {
+			str.append("0"+scheduledDate.getMonthValue());
+		}else {
+			str.append("" +scheduledDate.getMonthValue());
+		}
+		str.append("/");
+		str.append(scheduledDate.getYear() + " ");
+		if (scheduledDate.getHour() < 10) { 
+			str.append("0"+ scheduledDate.getHour());
+		}else {
+			str.append(""+ scheduledDate.getHour());
+		}
+		str.append(":");
+	
+		if (scheduledDate.getMinute() < 10) {
+			str.append("0"+ scheduledDate.getMinute());
+		}else {
+			str.append(""+ scheduledDate.getMinute());
+		}
+		return str.toString();
+	
 	}
 	
 

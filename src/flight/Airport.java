@@ -17,12 +17,12 @@ public class Airport {
 	public Airport () {
 		landings = new Vector<Flight>();
 		departures = new Vector<Flight>();
-		requestedFlights = new Vector<>();
+		requestedFlights = new Vector<Flight>();
 		airportName = "Natbag";
 	}
 	
 	public Airport (Scanner scan) {
-		requestedFlights = new Vector<>();
+		requestedFlights = new Vector<Flight>();
 		landings = new Vector<Flight>();
 		departures = new Vector<Flight>();
 		airportName = "Natbag";
@@ -57,6 +57,14 @@ public class Airport {
 		landings.add(new Flight(airLine, numFlight, terminal, depTime, country, city, airport));
 		return true;
 	}
+
+public void byRequiermentAll() {
+	requestedFlights.clear();
+	for(Flight flight : departures)
+		requestedFlights.add(flight);
+	for(Flight flight : landings)
+		requestedFlights.add(flight);
+}
 public void byRequierment(String direction,String country,String city,String airport,String airline,String dateStart,String dateEnd ,boolean sunday,boolean monday,boolean tuesday,boolean wednesday,boolean thursday,boolean friday,boolean saturday) {
 	requestedFlights.clear();
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu"); 
@@ -126,7 +134,7 @@ public String textFormate(String direction) {
 }
 	
 	public void setFromFile(Scanner scan) {
-		requestedFlights = new Vector<>();
+		requestedFlights = new Vector<Flight>();
 		landings = new Vector<Flight>();
 		departures = new Vector<Flight>();
 		airportName = "Natbag";

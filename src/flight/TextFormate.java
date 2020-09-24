@@ -6,7 +6,7 @@ public class TextFormate extends Formate{
 	@Override
 	protected String headerSTring() {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
@@ -22,14 +22,14 @@ public class TextFormate extends Formate{
 			str.append(", Coming from: "+each.getCity());
 			str.append(", Arrival time: "+each.getScheduledDateInString());
 		}
-		str.append(", Terminal: " +each.getTerminalNum() +"/n");
+		str.append(", Terminal: " +each.getTerminalNum() +"\n");
 		return str.toString();
 	}
 
 	@Override
 	protected String footerString() {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 }
